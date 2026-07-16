@@ -5,12 +5,15 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from database import connect, disconnect
 from routers import auth, brands, campaigns, entries, stats, admin
+import scheduler as sched
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await connect()
+    sched.start()
     yield
+    sched.stop()
     await disconnect()
 
 

@@ -85,6 +85,30 @@ async def send_winner_notification(name: str, email: str, campaign_title: str, p
     await _send(email, f"You won {campaign_title}!", html)
 
 
+async def send_ending_soon(name: str, email: str, campaign_id: str, campaign_title: str, prize: str, hours_left: int):
+    url = f"{APP_URL}/campaigns/{campaign_id}"
+    html = f"""
+    <div style="font-family:sans-serif;max-width:520px;margin:auto;background:#0f0f0f;color:#f5f5f5;border-radius:16px;overflow:hidden">
+      <div style="background:linear-gradient(135deg,#ef4444,#f97316);padding:32px;text-align:center">
+        <h1 style="margin:0;font-size:26px;color:#fff">Only {hours_left}h Left!</h1>
+        <p style="margin:8px 0 0;color:#fecaca;font-size:14px">The draw is almost here</p>
+      </div>
+      <div style="padding:32px">
+        <p>Hi <strong>{name}</strong>,</p>
+        <p>The <strong>{campaign_title}</strong> giveaway closes in <strong>{hours_left} hours</strong>!</p>
+        <p style="font-size:22px;font-weight:900;color:#f97316">{prize}</p>
+        <p>You&apos;re entered — share your referral link now to boost your visibility on the leaderboard before time runs out.</p>
+        <a href="{url}" style="display:inline-block;margin-top:12px;padding:12px 24px;background:#ef4444;color:#fff;border-radius:10px;text-decoration:none;font-weight:700">
+          View Campaign
+        </a>
+        <hr style="border-color:#333;margin:24px 0"/>
+        <p style="font-size:13px;color:#888">Good luck! — The GiveAwayLead Team</p>
+      </div>
+    </div>
+    """
+    await _send(email, f"Only {hours_left}h left — {campaign_title} draw is closing!", html)
+
+
 async def send_campaign_live(seller_email: str, seller_name: str, campaign_title: str, campaign_id: str):
     url = f"{APP_URL}/campaigns/{campaign_id}"
     html = f"""
