@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
   Gift, LayoutDashboard, Ticket, Trophy, User, LogOut,
-  PlusCircle, Users, BarChart3, CreditCard, ShieldCheck,
+  PlusCircle, Users, BarChart3, CreditCard, ShieldCheck, Shuffle,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { logoutAction } from "@/app/actions/auth"
@@ -31,6 +31,7 @@ const NAV_LINKS: Record<Role, { name: string; href: string; icon: React.ElementT
     { name: "Approvals",       href: "/dashboard/admin/approvals", icon: ShieldCheck },
     { name: "Campaigns",       href: "/dashboard/admin/campaigns", icon: Ticket },
     { name: "Users",           href: "/dashboard/admin/users",     icon: Users },
+    { name: "Winner Draw",     href: "/dashboard/admin/draw",      icon: Shuffle },
     { name: "Fraud Detection", href: "/dashboard/admin/fraud",     icon: Trophy },
     { name: "Revenue",         href: "/dashboard/admin/revenue",   icon: BarChart3 },
   ],

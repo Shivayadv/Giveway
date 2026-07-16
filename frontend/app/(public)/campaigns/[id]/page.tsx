@@ -1,12 +1,10 @@
 import { notFound } from "next/navigation"
+import { cookies } from "next/headers"
 import { ChevronLeft, ShieldCheck, Trophy, Users, Zap, Clock, Star } from "lucide-react"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { apiFetch, type CampaignDetail } from "@/lib/api"
+import { EntryForm } from "@/components/campaigns/entry-form"
 
 export default async function CampaignDetailsPage({ params }: { params: { id: string } }) {
   let campaign: CampaignDetail | null = null
@@ -17,6 +15,9 @@ export default async function CampaignDetailsPage({ params }: { params: { id: st
   }
 
   if (!campaign) notFound()
+
+  const token = (await cookies()).get("token")?.value ?? null
+  const isLoggedIn = !!token
 
   return (
     <div className="min-h-screen">
@@ -50,9 +51,9 @@ export default async function CampaignDetailsPage({ params }: { params: { id: st
 
             <div className="grid grid-cols-3 gap-3">
               {[
-                { icon: Trophy, value: campaign.winners,                              label: "Winners",    color: "text-primary",   bg: "bg-primary/10" },
-                { icon: Users,  value: campaign.participants.toLocaleString(),         label: "Joined",     color: "text-amber-400", bg: "bg-amber-400/10" },
-                { icon: Clock,  value: campaign.time_left,                            label: "Left",       color: "text-red-400",   bg: "bg-red-400/10" },
+                { icon: Trophy, value: campaign.winners,                      label: "Winners",  color: "text-primary",   bg: "bg-primary/10" },
+                { icon: Users,  value: campaign.participants.toLocaleString(), label: "Joined",   color: "text-amber-400", bg: "bg-amber-400/10" },
+                { icon: Clock,  value: campaign.time_left,                    label: "Left",     color: "text-red-400",   bg: "bg-red-400/10" },
               ].map((s) => (
                 <div key={s.label} className="rounded-xl bg-card border border-border/50 p-4 text-center">
                   <s.icon className={`h-5 w-5 ${s.color} mx-auto mb-1.5`} />
@@ -107,41 +108,13 @@ export default async function CampaignDetailsPage({ params }: { params: { id: st
                 </div>
               </div>
 
-              <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 flex items-center gap-3">
-                <Zap className="h-5 w-5 text-red-400 flex-shrink-0" />
-                <div>
-                  <p className="text-sm font-semibold text-red-400">Hurry! Closes in {campaign.time_left}</p>
-                  <p className="text-xs text-muted-foreground">{campaign.participants.toLocaleString()} people have already entered</p>
-                </div>
-              </div>
-
-              <Card className="border border-border/50 bg-card shadow-2xl">
-                <CardHeader className="border-b border-border/50 pb-5">
-                  <CardTitle className="text-xl">Secure Your Entry</CardTitle>
-                  <CardDescription>Fill in your details — takes less than 30 seconds.</CardDescription>
-                </CardHeader>
-                <CardContent className="p-6 space-y-4">
-                  {[
-                    { id: "name",  label: "Full Name",     type: "text",  ph: "John Smith" },
-                    { id: "phone", label: "Phone Number",  type: "tel",   ph: "+1 (555) 000-0000" },
-                    { id: "email", label: "Email Address", type: "email", ph: "you@example.com" },
-                    { id: "city",  label: "City",          type: "text",  ph: "e.g. New York" },
-                  ].map((f) => (
-                    <div key={f.id} className="space-y-1.5">
-                      <Label htmlFor={f.id} className="text-sm font-medium">{f.label}</Label>
-                      <Input id={f.id} type={f.type} placeholder={f.ph} className="h-11 bg-muted/40 border-border/60 rounded-xl focus:border-primary/50" />
-                    </div>
-                  ))}
-                  <div className="pt-2 space-y-3">
-                    <Button size="lg" className="w-full h-13 text-base font-bold shadow-lg shadow-primary/20 hover:shadow-primary/35 hover:-translate-y-0.5 transition-all">
-                      Participate Now — It&apos;s Free!
-                    </Button>
-                    <p className="text-xs text-center text-muted-foreground">
-                      By entering, you agree to our <a href="#" className="text-primary hover:underline">terms</a> & <a href="#" className="text-primary hover:underline">privacy policy</a>. We never sell your data.
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
+              <EntryForm
+                campaignId={params.id}
+                campaignTitle={campaign.title}
+                timeLeft={campaign.time_left}
+                participants={campaign.participants}
+                isLoggedIn={isLoggedIn}
+              />
 
               <div className="grid grid-cols-3 gap-2 text-center">
                 {[

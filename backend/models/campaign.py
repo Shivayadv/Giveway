@@ -22,6 +22,19 @@ class CampaignDetail(CampaignOut):
     terms: List[str]
     rating: float
     total_ratings: int
+    draw_date: Optional[str] = "TBD"
+    seller_id: Optional[str] = None
+
+
+class CampaignCreate(BaseModel):
+    title: str
+    price: str
+    description: str
+    image: str = ""
+    category: str = "Electronics"
+    duration_days: int = 7
+    winners: int = 1
+    offer_type: str = "free"  # free | discount | bogo
 
 
 class EntryCreate(BaseModel):
@@ -40,3 +53,24 @@ class EntryOut(BaseModel):
     joined_at: str
     draw_date: str
     entry_status: str  # Active | Won | Lost
+
+
+class LeadOut(BaseModel):
+    id: str
+    name: str
+    email: str
+    phone: str
+    city: str
+    campaign_title: str
+    joined_at: str
+    entry_status: str
+
+
+class WinnerOut(BaseModel):
+    entry_id: str
+    user_id: str
+    name: str
+    email: str
+    city: str
+    campaign_title: str
+    drawn_at: str
