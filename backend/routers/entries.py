@@ -7,9 +7,10 @@ from fastapi.responses import StreamingResponse
 import csv
 import io
 
-from database import campaigns_col, entries_col
+from database import campaigns_col, entries_col, users_col
 from models.campaign import EntryCreate, EntryOut, LeadOut
 from utils.security import decode_token
+from utils import email as mailer
 
 router = APIRouter(prefix="/api/entries", tags=["entries"])
 bearer = HTTPBearer()
@@ -74,7 +75,7 @@ async def export_leads_csv(
 ):
     output = io.StringIO()
     writer = csv.writer(output)
-    writer.writerow(["Name", "Email", "Phone", "City", "Campaign", "Joined At", "Status"])
+    writer.writerow(["Name", "Email", "Phone", "City", "Campaign", "Joined At", "Status", "Referred By"])
     async for e in entries_col().find({"campaign_id": campaign_id}).sort("joined_at", -1):
         writer.writerow([
             e.get("name", ""),
@@ -84,6 +85,7 @@ async def export_leads_csv(
             e.get("campaign_title", ""),
             e.get("joined_at", ""),
             e.get("entry_status", "Active"),
+            e.get("referred_by", ""),
         ])
     output.seek(0)
     return StreamingResponse(
@@ -91,6 +93,29 @@ async def export_leads_csv(
         media_type="text/csv",
         headers={"Content-Disposition": f"attachment; filename=leads-{campaign_id}.csv"},
     )
+
+
+@router.get("/campaign/{campaign_id}/leaderboard")
+async def referral_leaderboard(campaign_id: str):
+    """Public leaderboard of top referrers for a campaign."""
+    pipeline = [
+        {"$match": {"campaign_id": campaign_id, "referred_by": {"$ne": "", "$exists": True}}},
+        {"$group": {
+            "_id": "$referred_by",
+            "referrer_name": {"$first": "$referrer_name"},
+            "count": {"$sum": 1},
+        }},
+        {"$sort": {"count": -1}},
+        {"$limit": 10},
+    ]
+    results = []
+    async for row in entries_col().aggregate(pipeline):
+        results.append({
+            "ref_code": row["_id"],
+            "name": row.get("referrer_name") or "Anonymous",
+            "count": row["count"],
+        })
+    return results
 
 
 @router.post("", response_model=EntryOut, status_code=201)
@@ -112,6 +137,19 @@ async def create_entry(body: EntryCreate, payload: dict = Depends(_get_user)):
     if existing:
         raise HTTPException(status_code=409, detail="Already entered this campaign")
 
+    # Resolve referrer info from ref_code
+    referred_by = ""
+    referrer_name = ""
+    if body.ref_code:
+        referrer = await users_col().find_one({"referral_code": body.ref_code})
+        if referrer and str(referrer["_id"]) != user_id:
+            referred_by = body.ref_code
+            referrer_name = referrer.get("name", "")
+
+    # Fetch current user for their referral_code (needed for confirmation email)
+    current_user = await users_col().find_one({"_id": ObjectId(user_id)})
+    my_referral_code = current_user.get("referral_code", "") if current_user else ""
+
     now = datetime.now(timezone.utc).isoformat()
     doc = {
         "campaign_id":    body.campaign_id,
@@ -125,11 +163,22 @@ async def create_entry(body: EntryCreate, payload: dict = Depends(_get_user)):
         "joined_at":      now,
         "draw_date":      campaign.get("draw_date", "TBD"),
         "entry_status":   "Active",
+        "referred_by":    referred_by,
+        "referrer_name":  referrer_name,
     }
     result = await entries_col().insert_one(doc)
-
-    # Increment participant count
     await campaigns_col().update_one({"_id": oid}, {"$inc": {"participants": 1}})
+
+    # Send confirmation email (non-blocking)
+    mailer.fire(mailer.send_entry_confirmation(
+        name=body.name,
+        email=body.email,
+        campaign_id=body.campaign_id,
+        campaign_title=campaign["title"],
+        prize=campaign.get("price", ""),
+        draw_date=campaign.get("draw_date", "TBD"),
+        referral_code=my_referral_code,
+    ))
 
     return EntryOut(
         id=str(result.inserted_id),

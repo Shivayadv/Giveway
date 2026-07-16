@@ -43,6 +43,7 @@ class EntryCreate(BaseModel):
     email: str
     phone: str
     city: str
+    ref_code: str = ""  # referral code of the person who shared the link
 
 
 class EntryOut(BaseModel):

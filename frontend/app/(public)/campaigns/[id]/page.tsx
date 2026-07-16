@@ -1,10 +1,12 @@
 import { notFound } from "next/navigation"
 import { cookies } from "next/headers"
-import { ChevronLeft, ShieldCheck, Trophy, Users, Zap, Clock, Star } from "lucide-react"
+import { ChevronLeft, ShieldCheck, Trophy, Users, Zap, Clock, Star, Medal } from "lucide-react"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { apiFetch, type CampaignDetail } from "@/lib/api"
 import { EntryForm } from "@/components/campaigns/entry-form"
+
+interface LeaderboardEntry { ref_code: string; name: string; count: number }
 
 export default async function CampaignDetailsPage({ params }: { params: { id: string } }) {
   let campaign: CampaignDetail | null = null
@@ -18,6 +20,12 @@ export default async function CampaignDetailsPage({ params }: { params: { id: st
 
   const token = (await cookies()).get("token")?.value ?? null
   const isLoggedIn = !!token
+
+  let leaderboard: LeaderboardEntry[] = []
+  try {
+    leaderboard = await apiFetch<LeaderboardEntry[]>(`/api/entries/campaign/${params.id}/leaderboard`)
+  } catch {}
+
 
   return (
     <div className="min-h-screen">
@@ -93,6 +101,28 @@ export default async function CampaignDetailsPage({ params }: { params: { id: st
                 ))}
               </ul>
             </div>
+
+            {leaderboard.length > 0 && (
+              <div className="space-y-3">
+                <h3 className="font-bold flex items-center gap-2">
+                  <Medal className="h-4 w-4 text-amber-400" /> Top Referrers
+                </h3>
+                <div className="space-y-2">
+                  {leaderboard.map((r, i) => {
+                    const medalColors = ["text-amber-400", "text-slate-300", "text-amber-600"]
+                    return (
+                      <div key={r.ref_code} className="flex items-center justify-between px-4 py-2.5 rounded-xl border border-border/40 bg-card/50">
+                        <div className="flex items-center gap-3">
+                          <span className={`text-sm font-bold w-5 text-center ${medalColors[i] ?? "text-muted-foreground"}`}>{i + 1}</span>
+                          <span className="text-sm font-medium">{r.name}</span>
+                        </div>
+                        <span className="text-xs text-muted-foreground font-medium">{r.count} referral{r.count !== 1 ? "s" : ""}</span>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Right */}

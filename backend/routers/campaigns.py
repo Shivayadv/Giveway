@@ -7,6 +7,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from database import campaigns_col, entries_col, users_col
 from models.campaign import CampaignCreate, CampaignDetail, CampaignOut, WinnerOut
 from utils.security import decode_token
+from utils import email as mailer
 
 router = APIRouter(prefix="/api/campaigns", tags=["campaigns"])
 bearer = HTTPBearer(auto_error=False)
@@ -183,9 +184,21 @@ async def approve_campaign(campaign_id: str, payload: dict = Depends(_require_ro
         oid = ObjectId(campaign_id)
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid ID")
-    r = await campaigns_col().update_one({"_id": oid}, {"$set": {"status": "active"}})
-    if r.matched_count == 0:
+    campaign = await campaigns_col().find_one({"_id": oid})
+    if not campaign:
         raise HTTPException(status_code=404, detail="Campaign not found")
+    await campaigns_col().update_one({"_id": oid}, {"$set": {"status": "active"}})
+
+    # Notify seller (fire-and-forget)
+    if campaign.get("seller_id"):
+        seller = await users_col().find_one({"_id": ObjectId(campaign["seller_id"])})
+        if seller:
+            mailer.fire(mailer.send_campaign_live(
+                seller_email=seller["email"],
+                seller_name=seller["name"],
+                campaign_title=campaign["title"],
+                campaign_id=str(campaign["_id"]),
+            ))
     return {"status": "approved"}
 
 
@@ -224,7 +237,7 @@ async def draw_winners(campaign_id: str, payload: dict = Depends(_require_role("
 
     async for entry in entries_col().aggregate(pipeline):
         await entries_col().update_one({"_id": entry["_id"]}, {"$set": {"entry_status": "Won"}})
-        winners.append(WinnerOut(
+        w = WinnerOut(
             entry_id=str(entry["_id"]),
             user_id=entry.get("user_id", ""),
             name=entry.get("name", ""),
@@ -232,9 +245,16 @@ async def draw_winners(campaign_id: str, payload: dict = Depends(_require_role("
             city=entry.get("city", ""),
             campaign_title=campaign["title"],
             drawn_at=drawn_at,
+        )
+        winners.append(w)
+        # Notify winner (fire-and-forget)
+        mailer.fire(mailer.send_winner_notification(
+            name=w.name,
+            email=w.email,
+            campaign_title=campaign["title"],
+            prize=campaign.get("price", ""),
         ))
 
-    # Mark remaining entries as Lost and campaign as drawn
     await entries_col().update_many(
         {"campaign_id": campaign_id, "entry_status": "Active"},
         {"$set": {"entry_status": "Lost"}},
