@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from database import connect, disconnect
-from routers import auth, brands, campaigns, entries, stats
+from routers import auth, brands, campaigns, entries, stats, admin
 
 
 @asynccontextmanager
@@ -29,6 +29,7 @@ app.include_router(brands.router)
 app.include_router(campaigns.router)
 app.include_router(entries.router)
 app.include_router(stats.router)
+app.include_router(admin.router)
 
 
 @app.get("/health")

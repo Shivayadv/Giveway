@@ -104,6 +104,34 @@ async def login(body: UserLogin):
     return TokenResponse(access_token=token, user=_user_out(user))
 
 
+@router.put("/profile")
+async def update_profile(
+    body: dict,
+    credentials: HTTPAuthorizationCredentials = Depends(bearer),
+):
+    if not credentials:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    payload = decode_token(credentials.credentials)
+    if not payload:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+    updates: dict = {}
+    if body.get("name"):
+        updates["name"] = body["name"].strip()
+    if body.get("phone"):
+        updates["phone"] = body["phone"].strip()
+    if body.get("city"):
+        updates["city"] = body["city"].strip()
+
+    if updates:
+        await users_col().update_one({"_id": ObjectId(payload["sub"])}, {"$set": updates})
+
+    user = await users_col().find_one({"_id": ObjectId(payload["sub"])})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return _user_out(user)
+
+
 @router.get("/me", response_model=UserOut)
 async def me(credentials: HTTPAuthorizationCredentials = Depends(bearer)):
     if not credentials:
