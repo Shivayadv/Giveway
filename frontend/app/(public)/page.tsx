@@ -38,7 +38,7 @@ export default async function LandingPage() {
 
         <div className="container relative px-4 md:px-6 flex flex-col items-center text-center space-y-7">
           <Badge className="px-4 py-1.5 rounded-full bg-primary/15 text-primary border border-primary/25 text-sm font-semibold hover:bg-primary/20 transition-colors">
-            🎉 America&apos;s #1 Verified Giveaway Platform
+            🎉 India&apos;s #1 Verified Giveaway Platform
           </Badge>
 
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] max-w-5xl">
@@ -50,7 +50,7 @@ export default async function LandingPage() {
           </h1>
 
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed">
-            Join 500,000+ Americans winning iPhones, MacBooks, and premium gear every day from top verified brands. 100% free. 100% transparent.
+            Join 500,000+ Indians winning iPhones, MacBooks, and premium gear every day from top verified brands. 100% free. 100% transparent.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 pt-2">
@@ -185,7 +185,7 @@ export default async function LandingPage() {
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0djItSDM0di0yaC0ydi0yaDJ2LTJoMnYyaDJ2MmgtMnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-40" />
         <div className="relative container px-4 md:px-6 text-center space-y-6">
           <h2 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight">Ready to Start Winning?</h2>
-          <p className="text-white/80 text-lg max-w-xl mx-auto">Join 500,000+ Americans already winning premium products every day. It&apos;s completely free.</p>
+          <p className="text-white/80 text-lg max-w-xl mx-auto">Join 500,000+ Indians already winning premium products every day. It&apos;s completely free.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
             <Link href="/register">
               <Button size="lg" className="h-13 px-8 text-base font-bold bg-white text-orange-600 hover:bg-orange-50 shadow-xl hover:shadow-2xl transition-all">

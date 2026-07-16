@@ -5,13 +5,42 @@ import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { apiFetch, type CampaignDetail } from "@/lib/api"
 import { EntryForm } from "@/components/campaigns/entry-form"
+import type { Metadata } from "next"
 
 interface LeaderboardEntry { ref_code: string; name: string; count: number }
 
-export default async function CampaignDetailsPage({ params }: { params: { id: string } }) {
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params
+  try {
+    const c = await apiFetch<CampaignDetail>(`/api/campaigns/${id}`)
+    const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
+    return {
+      title: `Win ${c.title} — GiveAwayLead`,
+      description: c.description || `Enter to win ${c.title} from ${c.brand}. Free entry, ${c.winners} winner${c.winners !== 1 ? "s" : ""}.`,
+      openGraph: {
+        title: `🎁 Win ${c.title}`,
+        description: `${c.participants} people have entered. ${c.time_left} left!`,
+        images: [{ url: c.image, width: 800, height: 600 }],
+        url: `${APP_URL}/campaigns/${id}`,
+        type: "website",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: `🎁 Win ${c.title} — Free Entry!`,
+        description: `${c.participants} entries · ${c.time_left} left · ${c.winners} winner${c.winners !== 1 ? "s" : ""}`,
+        images: [c.image],
+      },
+    }
+  } catch {
+    return { title: "Giveaway — GiveAwayLead" }
+  }
+}
+
+export default async function CampaignDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   let campaign: CampaignDetail | null = null
   try {
-    campaign = await apiFetch<CampaignDetail>(`/api/campaigns/${params.id}`)
+    campaign = await apiFetch<CampaignDetail>(`/api/campaigns/${id}`)
   } catch {
     notFound()
   }
@@ -23,7 +52,7 @@ export default async function CampaignDetailsPage({ params }: { params: { id: st
 
   let leaderboard: LeaderboardEntry[] = []
   try {
-    leaderboard = await apiFetch<LeaderboardEntry[]>(`/api/entries/campaign/${params.id}/leaderboard`)
+    leaderboard = await apiFetch<LeaderboardEntry[]>(`/api/entries/campaign/${id}/leaderboard`)
   } catch {}
 
 
@@ -139,7 +168,7 @@ export default async function CampaignDetailsPage({ params }: { params: { id: st
               </div>
 
               <EntryForm
-                campaignId={params.id}
+                campaignId={id}
                 campaignTitle={campaign.title}
                 timeLeft={campaign.time_left}
                 participants={campaign.participants}

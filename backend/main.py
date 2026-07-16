@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from database import connect, disconnect
-from routers import auth, brands, campaigns, entries, stats, admin
+from routers import auth, brands, campaigns, entries, stats, admin, fraud, payments
 import scheduler as sched
 
 
@@ -33,6 +33,8 @@ app.include_router(campaigns.router)
 app.include_router(entries.router)
 app.include_router(stats.router)
 app.include_router(admin.router)
+app.include_router(fraud.router)
+app.include_router(payments.router)
 
 
 @app.get("/health")

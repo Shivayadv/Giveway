@@ -10,8 +10,8 @@ export async function Navbar() {
 
   const navLinks = [
     { label: "Campaigns", href: "/campaigns" },
+    { label: "Winners",   href: "/winners" },
     { label: "How it Works", href: "/#how-it-works" },
-    { label: "Testimonials", href: "/#testimonials" },
   ]
 
   return (

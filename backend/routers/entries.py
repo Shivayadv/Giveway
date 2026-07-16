@@ -31,6 +31,23 @@ def _require_role(*roles: str):
     return dep
 
 
+@router.get("/winners")
+async def public_winners(limit: int = Query(20, le=50)):
+    """Public list of recent winners across all campaigns."""
+    results = []
+    async for e in entries_col().find({"entry_status": "Won"}).sort("joined_at", -1).limit(limit):
+        campaign = await campaigns_col().find_one({"_id": ObjectId(e["campaign_id"])}) if e.get("campaign_id") else None
+        results.append({
+            "name":           e.get("name", ""),
+            "campaign_title": e.get("campaign_title", ""),
+            "prize":          campaign.get("price", e.get("prize", "")) if campaign else e.get("prize", ""),
+            "image":          campaign.get("image", "") if campaign else "",
+            "city":           e.get("city", ""),
+            "won_at":         e.get("joined_at", ""),
+        })
+    return results
+
+
 @router.get("/me", response_model=list[EntryOut])
 async def my_entries(payload: dict = Depends(_get_user)):
     user_id = payload["sub"]

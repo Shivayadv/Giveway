@@ -1,3 +1,4 @@
+import random
 from datetime import datetime, timedelta, timezone
 
 from bson import ObjectId
@@ -6,6 +7,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from database import users_col, campaigns_col, entries_col
 from utils.security import decode_token
+from utils import email as mailer
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
 bearer = HTTPBearer()
@@ -128,6 +130,54 @@ async def platform_analytics(payload: dict = Depends(_require_admin)):
         })
 
     return {"series": series, "top_campaigns": top_campaigns}
+
+
+@router.post("/draw/{campaign_id}")
+async def admin_draw(campaign_id: str, payload: dict = Depends(_require_admin)):
+    """Alias for the draw endpoint — delegates to campaigns router logic."""
+    from database import entries_col as _entries_col, campaigns_col as _campaigns_col
+    try:
+        oid = ObjectId(campaign_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid campaign ID")
+
+    campaign = await campaigns_col().find_one({"_id": oid})
+    if not campaign:
+        raise HTTPException(status_code=404, detail="Campaign not found")
+    if campaign.get("winner_drawn"):
+        raise HTTPException(status_code=409, detail="Winners already drawn")
+
+    n_winners = campaign.get("winners", 1)
+    pipeline = [
+        {"$match": {"campaign_id": campaign_id, "entry_status": "Active"}},
+        {"$sample": {"size": n_winners}},
+    ]
+    winners = []
+    drawn_at = datetime.now(timezone.utc).isoformat()
+
+    async for entry in entries_col().aggregate(pipeline):
+        await entries_col().update_one({"_id": entry["_id"]}, {"$set": {"entry_status": "Won"}})
+        w = {
+            "entry_id": str(entry["_id"]),
+            "name":     entry.get("name", ""),
+            "email":    entry.get("email", ""),
+            "city":     entry.get("city", ""),
+            "won_at":   drawn_at,
+        }
+        winners.append(w)
+        mailer.fire(mailer.send_winner_notification(
+            name=w["name"],
+            email=w["email"],
+            campaign_title=campaign["title"],
+            prize=campaign.get("price", ""),
+        ))
+
+    await entries_col().update_many(
+        {"campaign_id": campaign_id, "entry_status": "Active"},
+        {"$set": {"entry_status": "Lost"}},
+    )
+    await campaigns_col().update_one({"_id": oid}, {"$set": {"status": "ended", "winner_drawn": True}})
+    return {"campaign_id": campaign_id, "winners": winners}
 
 
 @router.get("/campaigns")
