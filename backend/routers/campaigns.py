@@ -166,7 +166,7 @@ async def create_campaign(body: CampaignCreate, payload: dict = Depends(_require
             "One entry per person",
             "Winner contacted within 48 hours of draw",
         ],
-        "draw_date": ends_at.strftime("%b %-d, %Y") if hasattr(ends_at, "strftime") else "TBD",
+        "draw_date": ends_at.strftime("%b %d, %Y").replace(" 0", " ") if hasattr(ends_at, "strftime") else "TBD",
         "ends_at":   ends_at,
         "created_at": now,
         "time_left": _time_left(ends_at),
