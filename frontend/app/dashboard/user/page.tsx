@@ -109,7 +109,7 @@ export default async function UserDashboardPage() {
                 <TableBody>
                   {stats.entries.map((c) => {
                     const st = STATUS_CONFIG[c.entry_status as keyof typeof STATUS_CONFIG] ?? STATUS_CONFIG.Active
-                    const joinedDate = c.joined_at ? new Date(c.joined_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "—"
+                    const joinedDate = c.joined_at ? new Date(c.joined_at).toLocaleDateString("en-IN", { month: "short", day: "numeric", year: "numeric" }) : "—"
                     return (
                       <TableRow key={c.id} className="border-border/40 hover:bg-muted/30 transition-colors">
                         <TableCell className="font-medium pl-6 py-4">{c.campaign_title}</TableCell>

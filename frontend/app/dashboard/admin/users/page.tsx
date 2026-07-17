@@ -136,7 +136,7 @@ export default function AdminUsersPage() {
                       </TableCell>
                       <TableCell className="text-muted-foreground text-sm hidden lg:table-cell">{u.entries}</TableCell>
                       <TableCell className="text-muted-foreground text-xs hidden md:table-cell">
-                        {u.created_at ? new Date(u.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "—"}
+                        {u.created_at ? new Date(u.created_at).toLocaleDateString("en-IN", { month: "short", day: "numeric", year: "numeric" }) : "—"}
                       </TableCell>
                       <TableCell className="text-right pr-6">
                         {u.role !== "admin" && (

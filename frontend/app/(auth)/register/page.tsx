@@ -66,7 +66,7 @@ export default function RegisterPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <Label htmlFor="brand_name" className="text-sm font-medium">Brand Name</Label>
-                  <Input id="brand_name" name="brand_name" placeholder="TechCorp USA" className="h-11 rounded-xl bg-muted/40 border-border/60" required />
+                  <Input id="brand_name" name="brand_name" placeholder="TechCorp India" className="h-11 rounded-xl bg-muted/40 border-border/60" required />
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="brand_category" className="text-sm font-medium">Category</Label>

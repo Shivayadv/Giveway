@@ -39,7 +39,7 @@ async def platform_stats(payload: dict = Depends(_require_role("admin"))):
         "total_campaigns":  total_campaigns,
         "active_giveaways": active_giveaways,
         "total_entries":    total_entries,
-        "total_revenue":    "$2.9M",   # placeholder until payments collection
+        "total_revenue":    "₹24Cr",   # placeholder until payments collection
         "recent_signups":   recent_users,
     }
 

@@ -122,7 +122,7 @@ export default function AdminCampaignsPage() {
                       <TableCell className="text-muted-foreground text-sm hidden lg:table-cell">{c.category}</TableCell>
                       <TableCell className="font-semibold">{c.leads.toLocaleString()}</TableCell>
                       <TableCell className="text-muted-foreground text-xs hidden md:table-cell">
-                        {c.created_at ? new Date(c.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "—"}
+                        {c.created_at ? new Date(c.created_at).toLocaleDateString("en-IN", { month: "short", day: "numeric", year: "numeric" }) : "—"}
                       </TableCell>
                       <TableCell className="text-right pr-6">
                         <Badge variant="outline" className={`text-xs capitalize ${STATUS_COLORS[c.status] ?? STATUS_COLORS.ended}`}>

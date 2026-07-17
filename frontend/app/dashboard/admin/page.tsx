@@ -18,7 +18,7 @@ export default async function AdminDashboardPage() {
     total_campaigns: 0,
     active_giveaways: 0,
     total_entries: 0,
-    total_revenue: "$0",
+    total_revenue: "₹0",
     recent_signups: [],
   }
   try {

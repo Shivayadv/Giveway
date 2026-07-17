@@ -17,18 +17,18 @@ CAMPAIGNS = [
     {
         "title": "iPhone 16 Pro Max Giveaway",
         "image": "https://images.unsplash.com/photo-1696446701796-da61d14c7a29?w=800&q=80",
-        "price": "$1,699",
+        "price": "₹1,42,900",
         "offer": "Win a brand-new iPhone 16 Pro Max 1TB in Titanium Black",
         "participants": 12847,
         "time_left": "2d 14h",
-        "brand": "TechCorp USA",
+        "brand": "TechCorp India",
         "category": "Electronics",
         "urgent": True,
         "winners": 1,
         "status": "active",
         "description": "Enter for your chance to win the all-new iPhone 16 Pro Max with 1TB storage. Powered by Apple Intelligence, the A18 Pro chip, and a stunning 6.9-inch ProMotion display. This is the most powerful iPhone ever made.",
         "terms": [
-            "Valid for US residents only (18+)",
+            "Valid for Indian residents only (18+)",
             "One entry per person",
             "Winner contacted within 48 hours of draw",
             "Prize non-transferable and non-refundable",
@@ -42,7 +42,7 @@ CAMPAIGNS = [
     {
         "title": "Sony PlayStation 5 Bundle",
         "image": "https://images.unsplash.com/photo-1607853202273-797f1c22a38e?w=800&q=80",
-        "price": "$649",
+        "price": "₹54,990",
         "offer": "Win a PS5 Slim + DualSense Controller + 3 AAA Games",
         "participants": 9234,
         "time_left": "5d 8h",
@@ -53,7 +53,7 @@ CAMPAIGNS = [
         "status": "active",
         "description": "Score the ultimate gaming setup with a PS5 Slim console, extra DualSense Wireless Controller in Cobalt Blue, and your choice of 3 AAA game titles from our catalog.",
         "terms": [
-            "Valid for US residents only (18+)",
+            "Valid for Indian residents only (18+)",
             "Winner selects 3 games from approved list",
             "Draw date: Aug 10, 2026",
             "One entry per household",
@@ -66,19 +66,19 @@ CAMPAIGNS = [
     {
         "title": "MacBook Pro 14\" M4 Giveaway",
         "image": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&q=80",
-        "price": "$1,999",
+        "price": "₹1,99,900",
         "offer": "Win a MacBook Pro 14\" M4 chip, 32GB RAM, 1TB SSD",
         "participants": 7891,
         "time_left": "3d 2h",
-        "brand": "TechCorp USA",
+        "brand": "TechCorp India",
         "category": "Electronics",
         "urgent": True,
         "winners": 1,
         "status": "active",
         "description": "The MacBook Pro 14\" with the M4 chip is a powerhouse for creative professionals. Features 32GB unified memory, 1TB SSD, and the stunning Liquid Retina XDR display.",
         "terms": [
-            "Valid for US residents only (18+)",
-            "Winner must provide valid US shipping address",
+            "Valid for Indian residents only (18+)",
+            "Winner must provide valid Indian shipping address",
             "Draw date: Jul 28, 2026",
             "Prize includes standard AppleCare",
         ],
@@ -90,7 +90,7 @@ CAMPAIGNS = [
     {
         "title": "Nike Air Jordan 1 Retro High",
         "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80",
-        "price": "$180",
+        "price": "₹15,000",
         "offer": "Win limited-edition Air Jordan 1 Retro High OG Chicago",
         "participants": 5423,
         "time_left": "7d 0h",
@@ -101,7 +101,7 @@ CAMPAIGNS = [
         "status": "active",
         "description": "Cop the most iconic sneaker of all time. The Air Jordan 1 Retro High OG in the legendary Chicago colorway. Three winners will be selected to receive a pair in their size.",
         "terms": [
-            "US residents only (18+)",
+            "Indian residents only (18+)",
             "Winner specifies size at time of entry",
             "Size availability not guaranteed for all winners",
             "Draw date: Aug 15, 2026",
@@ -114,7 +114,7 @@ CAMPAIGNS = [
     {
         "title": "Dyson Airwrap Complete Styler",
         "image": "https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=800&q=80",
-        "price": "$599",
+        "price": "₹44,900",
         "offer": "Win the Dyson Airwrap Complete Styler + Carry Bag",
         "participants": 8102,
         "time_left": "4d 16h",
@@ -125,7 +125,7 @@ CAMPAIGNS = [
         "status": "active",
         "description": "The Dyson Airwrap Complete Styler uses Coanda airflow to curl, wave, smooth, and dry hair simultaneously — without extreme heat. Includes 8 styling attachments and premium carry bag.",
         "terms": [
-            "US residents only (21+)",
+            "Indian residents only (18+)",
             "One entry per email address",
             "Draw date: Aug 5, 2026",
             "No purchase necessary",
@@ -138,7 +138,7 @@ CAMPAIGNS = [
     {
         "title": "Samsung 85\" 4K Neo QLED TV",
         "image": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=800&q=80",
-        "price": "$2,499",
+        "price": "₹2,10,000",
         "offer": "Win a Samsung 85\" 4K Neo QLED Smart TV with installation",
         "participants": 4318,
         "time_left": "9d 3h",
@@ -149,9 +149,9 @@ CAMPAIGNS = [
         "status": "active",
         "description": "Transform your living room with the Samsung 85\" Neo QLED 4K TV. Quantum Matrix Technology, Neural Quantum Processor 4K, and Dolby Atmos sound. Professional installation included.",
         "terms": [
-            "US residents only (18+)",
-            "Professional installation included within continental US",
-            "Winner must provide valid US address for delivery",
+            "Indian residents only (18+)",
+            "Professional installation included across India",
+            "Winner must provide valid Indian address for delivery",
             "Draw date: Aug 20, 2026",
         ],
         "rating": 4.6,
@@ -163,21 +163,21 @@ CAMPAIGNS = [
 
 DEMO_USERS = [
     {
-        "name": "Jake Morrison",
-        "email": "jake@example.com",
-        "phone": "+1 (212) 555-0101",
+        "name": "Rahul Sharma",
+        "email": "rahul@example.com",
+        "phone": "+91 98765 43210",
         "role": "user",
     },
     {
-        "name": "Emily Rodriguez",
-        "email": "emily@example.com",
-        "phone": "+1 (310) 555-0202",
+        "name": "Priya Patel",
+        "email": "priya@example.com",
+        "phone": "+91 91234 56789",
         "role": "user",
     },
     {
-        "name": "Marcus Thompson",
-        "email": "marcus@example.com",
-        "phone": "+1 (312) 555-0303",
+        "name": "Arjun Singh",
+        "email": "arjun@example.com",
+        "phone": "+91 99887 76655",
         "role": "seller",
     },
 ]
@@ -202,7 +202,7 @@ async def seed():
         await users.insert_one({
             "name": settings.admin_name,
             "email": settings.admin_email,
-            "phone": "+1 (800) 555-0000",
+            "phone": "+91 80000 00000",
             "password_hash": hash_password(settings.admin_password),
             "role": "admin",
             "referral_code": generate_referral_code("ADMIN"),
@@ -259,14 +259,14 @@ async def seed():
         print(f"Campaigns already exist ({len(campaign_ids)}), skipping insert.")
 
     # ── entries (demo participations) ─────────────────────────────────────────
-    jake_id   = demo_user_ids.get("jake@example.com")
-    emily_id  = demo_user_ids.get("emily@example.com")
+    rahul_id  = demo_user_ids.get("rahul@example.com")
+    priya_id  = demo_user_ids.get("priya@example.com")
     now_iso   = datetime.now(timezone.utc).isoformat()
 
     demo_entries = []
     for i, (user_id, user_name, user_email) in enumerate([
-        (jake_id,  "Jake Morrison",    "jake@example.com"),
-        (emily_id, "Emily Rodriguez",  "emily@example.com"),
+        (rahul_id, "Rahul Sharma", "rahul@example.com"),
+        (priya_id, "Priya Patel",  "priya@example.com"),
     ]):
         if not user_id:
             continue
@@ -281,8 +281,8 @@ async def seed():
                     "user_id":        user_id,
                     "name":           user_name,
                     "email":          user_email,
-                    "phone":          "+1 (555) 000-0001",
-                    "city":           "New York" if i == 0 else "Los Angeles",
+                    "phone":          "+91 98765 43210",
+                    "city":           "Mumbai" if i == 0 else "Bengaluru",
                     "joined_at":      now_iso,
                     "draw_date":      c_data.get("draw_date", "TBD"),
                     "entry_status":   "Active",

@@ -69,7 +69,7 @@ export default function CreateCampaignPage() {
     <div className="max-w-3xl mx-auto space-y-8">
       <div>
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Create New Campaign</h1>
-        <p className="text-muted-foreground mt-1">Launch a premium giveaway to capture high-quality US leads.</p>
+        <p className="text-muted-foreground mt-1">Launch a premium giveaway to capture high-quality Indian leads.</p>
       </div>
 
       <form onSubmit={handleSubmit}>

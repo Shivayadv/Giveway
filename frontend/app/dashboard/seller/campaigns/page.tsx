@@ -38,7 +38,7 @@ export default async function SellerCampaignsPage() {
             <PlusCircle className="h-8 w-8 text-primary" />
           </div>
           <h3 className="text-lg font-semibold">No campaigns yet</h3>
-          <p className="text-muted-foreground text-sm max-w-sm mx-auto">Create your first giveaway campaign and start capturing high-quality US leads.</p>
+          <p className="text-muted-foreground text-sm max-w-sm mx-auto">Create your first giveaway campaign and start capturing high-quality Indian leads.</p>
           <Button asChild variant="outline" className="mt-2">
             <Link href="/dashboard/seller/campaigns/new">Create Campaign</Link>
           </Button>

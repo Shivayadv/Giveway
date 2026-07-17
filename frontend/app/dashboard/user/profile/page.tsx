@@ -138,7 +138,7 @@ export default function ProfilePage() {
                   <Label htmlFor="city">City</Label>
                   <Input
                     id="city"
-                    placeholder="e.g. New York"
+                    placeholder="e.g. Mumbai"
                     value={form.city}
                     onChange={(e) => setForm((f) => ({ ...f, city: e.target.value }))}
                     className="h-11 bg-muted/40 border-border/60 rounded-xl"

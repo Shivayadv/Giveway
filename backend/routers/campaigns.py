@@ -129,7 +129,7 @@ async def get_campaign(campaign_id: str):
     c.setdefault("urgent", False)
     c.setdefault("rating", 4.5)
     c.setdefault("total_ratings", 0)
-    c.setdefault("terms", ["Valid for US residents only (18+)", "One entry per person"])
+    c.setdefault("terms", ["Valid for Indian residents only (18+)", "One entry per person"])
     c.setdefault("description", c.get("title", ""))
     return CampaignDetail(**_fmt(c))
 
@@ -162,7 +162,7 @@ async def create_campaign(body: CampaignCreate, payload: dict = Depends(_require
         "rating":       0.0,
         "total_ratings": 0,
         "terms": [
-            "Valid for US residents only (18+)",
+            "Valid for Indian residents only (18+)",
             "One entry per person",
             "Winner contacted within 48 hours of draw",
         ],

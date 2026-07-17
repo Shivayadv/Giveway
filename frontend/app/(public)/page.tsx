@@ -6,9 +6,9 @@ import { Badge } from "@/components/ui/badge"
 import { apiFetch, type Campaign } from "@/lib/api"
 
 const TESTIMONIALS = [
-  { name: "Jake Morrison",   city: "New York",    won: "MacBook Pro",      initials: "JM", stars: 5, quote: "I entered on a whim and two days later I had a MacBook on my doorstep. This platform is absolutely legit!" },
-  { name: "Emily Rodriguez", city: "Los Angeles", won: "iPhone 16 Pro",    initials: "ER", stars: 5, quote: "Finally a giveaway platform I can trust. The draw was transparent and I got my phone within a week. Incredible!" },
-  { name: "Marcus Thompson", city: "Chicago",     won: "Sony PS5",         initials: "MT", stars: 5, quote: "Won a PS5 console last month. My friends thought I was joking until I showed them! Best discovery of the year." },
+  { name: "Rahul Sharma",  city: "Mumbai",    won: "MacBook Pro",   initials: "RS", stars: 5, quote: "Maine ek baar try kiya aur do din baad MacBook mere ghar pahunch gaya. Yeh platform bilkul asli hai!" },
+  { name: "Priya Patel",   city: "Bengaluru", won: "iPhone 16 Pro", initials: "PP", stars: 5, quote: "Finally a giveaway platform I can trust. The draw was transparent and I got my phone within a week. Incredible!" },
+  { name: "Arjun Singh",   city: "Delhi",     won: "Sony PS5",      initials: "AS", stars: 5, quote: "PS5 jeeta pichle mahine. Mere doston ko yakeen nahi hua jab tak maine unhe dikhaya! Best platform ever." },
 ]
 
 const HOW_IT_WORKS = [
@@ -82,7 +82,7 @@ export default async function LandingPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[
               { value: "500K+",  label: "Active Users" },
-              { value: "$2.4M+", label: "Prizes Given Away" },
+              { value: "₹20Cr+", label: "Prizes Given Away" },
               { value: "8,400+", label: "Campaigns Run" },
               { value: "100%",   label: "Verified Brands" },
             ].map((stat) => (

@@ -191,10 +191,10 @@ export function EntryForm({ campaignId, campaignTitle, timeLeft, participants, i
         <CardContent className="p-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             {[
-              { id: "name",  label: "Full Name",    type: "text",  ph: "John Smith",        field: "name" },
-              { id: "phone", label: "Phone Number", type: "tel",   ph: "+1 (555) 000-0000", field: "phone" },
+              { id: "name",  label: "Full Name",    type: "text",  ph: "Rahul Sharma",      field: "name" },
+              { id: "phone", label: "Phone Number", type: "tel",   ph: "+91 98765 43210",   field: "phone" },
               { id: "email", label: "Email Address",type: "email", ph: "you@example.com",   field: "email" },
-              { id: "city",  label: "City",         type: "text",  ph: "e.g. New York",     field: "city" },
+              { id: "city",  label: "City",         type: "text",  ph: "e.g. Mumbai",       field: "city" },
             ].map((f) => (
               <div key={f.id} className="space-y-1.5">
                 <Label htmlFor={f.id} className="text-sm font-medium">{f.label}</Label>

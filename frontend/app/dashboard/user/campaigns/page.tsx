@@ -102,7 +102,7 @@ export default async function UserCampaignsPage() {
                             <TableCell className="font-medium pl-6 py-4">{e.campaign_title}</TableCell>
                             <TableCell className="text-muted-foreground text-sm">{e.prize}</TableCell>
                             <TableCell className="text-muted-foreground text-sm hidden md:table-cell">
-                              {e.joined_at ? new Date(e.joined_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "—"}
+                              {e.joined_at ? new Date(e.joined_at).toLocaleDateString("en-IN", { month: "short", day: "numeric", year: "numeric" }) : "—"}
                             </TableCell>
                             <TableCell className="text-right pr-6">
                               <Badge variant="outline" className={`text-xs ${sc.cls}`}>{sc.label}</Badge>
