@@ -1,15 +1,9 @@
 import Link from "next/link"
-import { ChevronRight, Trophy, Users, Zap, Ticket, User, Star, ArrowRight, ShieldCheck, Gift } from "lucide-react"
+import { ChevronRight, Trophy, Users, Zap, Ticket, User, ArrowRight, ShieldCheck, Gift } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { apiFetch, type Campaign } from "@/lib/api"
-
-const TESTIMONIALS = [
-  { name: "Rahul Sharma",  city: "Mumbai",    won: "MacBook Pro",   initials: "RS", stars: 5, quote: "Maine ek baar try kiya aur do din baad MacBook mere ghar pahunch gaya. Yeh platform bilkul asli hai!" },
-  { name: "Priya Patel",   city: "Bengaluru", won: "iPhone 16 Pro", initials: "PP", stars: 5, quote: "Finally a giveaway platform I can trust. The draw was transparent and I got my phone within a week. Incredible!" },
-  { name: "Arjun Singh",   city: "Delhi",     won: "Sony PS5",      initials: "AS", stars: 5, quote: "PS5 jeeta pichle mahine. Mere doston ko yakeen nahi hua jab tak maine unhe dikhaya! Best platform ever." },
-]
 
 const HOW_IT_WORKS = [
   { step: "01", icon: Ticket, title: "Browse Campaigns", desc: "Explore curated premium giveaways from top verified brands — electronics, fashion, gadgets & more.", color: "text-primary", bg: "bg-primary/10", ring: "ring-primary/20" },
@@ -17,13 +11,38 @@ const HOW_IT_WORKS = [
   { step: "03", icon: Trophy, title: "Win & Collect", desc: "After the draw, winners are announced publicly. If you win, the product ships directly to your door.", color: "text-green-400", bg: "bg-green-400/10", ring: "ring-green-400/20" },
 ]
 
+interface PublicStats {
+  total_users: number
+  total_campaigns: number
+  active_giveaways: number
+  total_entries: number
+}
+
+function fmtNum(n: number): string {
+  if (n >= 10_00_000) return `${(n / 10_00_000).toFixed(1).replace(/\.0$/, "")}M`
+  if (n >= 1_000)     return `${(n / 1_000).toFixed(1).replace(/\.0$/, "")}K`
+  return String(n)
+}
+
 export default async function LandingPage() {
   let featured: Campaign[] = []
+  let stats: PublicStats = { total_users: 0, total_campaigns: 0, active_giveaways: 0, total_entries: 0 }
+
   try {
-    featured = await apiFetch<Campaign[]>("/api/campaigns?featured=true")
+    [featured, stats] = await Promise.all([
+      apiFetch<Campaign[]>("/api/campaigns?featured=true"),
+      apiFetch<PublicStats>("/api/stats/public"),
+    ])
   } catch {
     // backend not running — show empty state gracefully
   }
+
+  const statCards = [
+    { value: fmtNum(stats.total_users),      label: "Registered Users" },
+    { value: fmtNum(stats.total_entries),    label: "Total Entries" },
+    { value: fmtNum(stats.total_campaigns),  label: "Campaigns Run" },
+    { value: fmtNum(stats.active_giveaways), label: "Live Giveaways" },
+  ]
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -33,7 +52,7 @@ export default async function LandingPage() {
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <div className="absolute left-1/2 top-0 -translate-x-1/2 h-[600px] w-[900px] rounded-full bg-orange-500/12 blur-[100px]" />
           <div className="absolute -left-20 top-20 h-[400px] w-[400px] rounded-full bg-amber-500/8 blur-[80px]" />
-          <div className="absolute -right-20 bottom-0 h-[300px] w-[500px] rounded-full bg-orange-600/6 blur-[80px]" />
+          <div className="absolute right-0 bottom-0 h-[300px] w-[500px] rounded-full bg-orange-600/6 blur-[80px]" />
         </div>
 
         <div className="container relative px-4 md:px-6 flex flex-col items-center text-center space-y-7">
@@ -50,7 +69,7 @@ export default async function LandingPage() {
           </h1>
 
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed">
-            Join 500,000+ Indians winning iPhones, MacBooks, and premium gear every day from top verified brands. 100% free. 100% transparent.
+            Join thousands of Indians winning iPhones, MacBooks, and premium gear every day from top verified brands. 100% free. 100% transparent.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 pt-2">
@@ -76,18 +95,15 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* ── Stats Bar ───────────────────────────── */}
+      {/* ── Live Stats Bar ───────────────────────── */}
       <section className="border-y border-border/50 bg-card/40 py-8">
         <div className="container px-4 md:px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            {[
-              { value: "500K+",  label: "Active Users" },
-              { value: "₹20Cr+", label: "Prizes Given Away" },
-              { value: "8,400+", label: "Campaigns Run" },
-              { value: "100%",   label: "Verified Brands" },
-            ].map((stat) => (
+            {statCards.map((stat) => (
               <div key={stat.label} className="space-y-1">
-                <div className="text-3xl md:text-4xl font-extrabold text-primary">{stat.value}</div>
+                <div className="text-3xl md:text-4xl font-extrabold text-primary">
+                  {stat.value || "—"}
+                </div>
                 <div className="text-sm text-muted-foreground font-medium">{stat.label}</div>
               </div>
             ))}
@@ -142,7 +158,7 @@ export default async function LandingPage() {
                       <p className="text-muted-foreground text-sm mt-1 line-through">{c.price}</p>
                     </div>
                     <div className="flex items-center justify-between text-xs font-medium text-muted-foreground border-t border-border/50 pt-3">
-                      <span className="flex items-center gap-1.5"><Users className="h-3.5 w-3.5 text-primary" />{c.participants.toLocaleString()} joined</span>
+                      <span className="flex items-center gap-1.5"><Users className="h-3.5 w-3.5 text-primary" />{c.participants.toLocaleString("en-IN")} joined</span>
                       <span className="flex items-center gap-1.5 text-amber-400"><Trophy className="h-3.5 w-3.5" />{c.winners} winner{c.winners !== 1 ? "s" : ""}</span>
                     </div>
                     <Link href={`/campaigns/${c.id}`} className="block">
@@ -185,7 +201,9 @@ export default async function LandingPage() {
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0djItSDM0di0yaC0ydi0yaDJ2LTJoMnYyaDJ2MmgtMnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-40" />
         <div className="relative container px-4 md:px-6 text-center space-y-6">
           <h2 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight">Ready to Start Winning?</h2>
-          <p className="text-white/80 text-lg max-w-xl mx-auto">Join 500,000+ Indians already winning premium products every day. It&apos;s completely free.</p>
+          <p className="text-white/80 text-lg max-w-xl mx-auto">
+            Join our growing community of winners across India. It&apos;s completely free.
+          </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
             <Link href="/register">
               <Button size="lg" className="h-13 px-8 text-base font-bold bg-white text-orange-600 hover:bg-orange-50 shadow-xl hover:shadow-2xl transition-all">
@@ -197,38 +215,6 @@ export default async function LandingPage() {
                 Browse Campaigns
               </Button>
             </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Testimonials ─────────────────────────── */}
-      <section className="py-20 md:py-24" id="testimonials">
-        <div className="container px-4 md:px-6">
-          <div className="text-center space-y-3 mb-14">
-            <div className="text-sm font-semibold text-primary uppercase tracking-wider">Winners Say</div>
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Real Winners. Real Joy.</h2>
-            <p className="text-muted-foreground text-lg max-w-xl mx-auto">Hear from people who won premium products through our platform.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {TESTIMONIALS.map((t) => (
-              <Card key={t.name} className="border border-border/50 bg-card hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 p-6">
-                <CardContent className="p-0 space-y-4">
-                  <div className="flex gap-0.5">
-                    {Array.from({ length: t.stars }).map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-primary text-primary" />
-                    ))}
-                  </div>
-                  <p className="text-muted-foreground leading-relaxed">&ldquo;{t.quote}&rdquo;</p>
-                  <div className="flex items-center gap-3 pt-2 border-t border-border/50">
-                    <div className="w-10 h-10 rounded-full bg-primary/15 flex items-center justify-center font-bold text-sm text-primary ring-1 ring-primary/20">{t.initials}</div>
-                    <div>
-                      <p className="font-semibold text-sm">{t.name}</p>
-                      <p className="text-xs text-muted-foreground">{t.city} · Won <span className="text-primary font-medium">{t.won}</span></p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
           </div>
         </div>
       </section>

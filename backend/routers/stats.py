@@ -19,6 +19,21 @@ def _require_role(role: str):
     return dep
 
 
+@router.get("/public")
+async def public_stats():
+    """Live counts — no auth required, used on the landing page."""
+    total_users      = await users_col().count_documents({})
+    total_campaigns  = await campaigns_col().count_documents({})
+    active_giveaways = await campaigns_col().count_documents({"status": "active"})
+    total_entries    = await entries_col().count_documents({})
+    return {
+        "total_users":      total_users,
+        "total_campaigns":  total_campaigns,
+        "active_giveaways": active_giveaways,
+        "total_entries":    total_entries,
+    }
+
+
 @router.get("/platform")
 async def platform_stats(payload: dict = Depends(_require_role("admin"))):
     total_users     = await users_col().count_documents({})

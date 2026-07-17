@@ -147,7 +147,7 @@ async def create_campaign(body: CampaignCreate, payload: dict = Depends(_require
 
     doc = {
         "title":        body.title,
-        "price":        f"${body.price}" if not body.price.startswith("$") else body.price,
+        "price":        f"₹{body.price}" if not body.price.startswith("₹") else body.price,
         "offer":        _offer_label(body.offer_type),
         "description":  body.description,
         "image":        body.image or "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80",
