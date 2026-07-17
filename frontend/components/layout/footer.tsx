@@ -67,7 +67,7 @@ export function Footer() {
             &copy; {new Date().getFullYear()} GiveAwayLead Platform. All rights reserved.
           </p>
           <p className="text-xs text-muted-foreground">
-            Made with <span className="text-primary">♥</span> in the USA
+            Made with <span className="text-primary">♥</span> in the INDIA
           </p>
         </div>
       </div>
